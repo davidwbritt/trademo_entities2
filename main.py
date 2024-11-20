@@ -17,6 +17,7 @@ Key Features:
 import logging
 from merge_docs import merge_documents
 import json
+from sample import trademo, openc
 
 def main():
     """
@@ -26,33 +27,16 @@ def main():
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-    # Example source and target JSON documents
-    source_doc = {
-        "name": "Alice Johnson",
-        "ids": [10, 20, 30],
-        "address": {"city": "San Francisco", "state": "CA"},
-        "batch": "batch1",
-        "url": "https://example.com/source"
-    }
-
-    target_doc = {
-        "name": "Bob Smith",
-        "ids": [30, 40, 50],
-        "address": {"city": "Los Angeles", "state": "CA", "country": "USA"},
-        "batch": "batch1",
-        "_id": "xyz789",
-        "url": "https://example.com/target"
-    }
-
     # Mapping rules for merging
     mapping = {
-        "replace": ["name"],
-        "merge": ["ids", "batch", "address"],
+        "replace": ["_id", "name", "jurisdiction"],
+        "merge": ["ids", "batch", "address", "url"],
+        "preserve-nulls": False
     }
 
     # Perform the merge
     logger.info("Starting document merge...")
-    merged_doc = merge_documents(source_doc, target_doc, mapping)
+    merged_doc = merge_documents(openc, trademo, mapping)
 
     # Log the result
     logger.info("Merged Document:\n%s", json.dumps(merged_doc, indent=4))
